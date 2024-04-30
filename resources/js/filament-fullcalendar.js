@@ -31,6 +31,8 @@ export default function fullcalendar({
 }) {
     return {
         init() {
+            console.log('init test')
+
             /** @type Calendar */
             const calendar = new Calendar(this.$el, {
                 headerToolbar: {
