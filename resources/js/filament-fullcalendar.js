@@ -31,8 +31,6 @@ export default function fullcalendar({
 }) {
     return {
         init() {
-            console.log('init test')
-
             /** @type Calendar */
             const calendar = new Calendar(this.$el, {
                 headerToolbar: {
@@ -49,7 +47,28 @@ export default function fullcalendar({
                 ...config,
                 locales,
                 eventClassNames,
-                eventContent,
+                eventContent: function (arg) {
+                    let title = document.createElement(
+                        arg.event.extendedProps.titleElement || 'p',
+                    )
+                    title.innerHTML = arg.event.title
+                    let arrayOfDomNodes = [title]
+
+                    const extraLines =
+                        arg.event.extendedProps?.extraLines || null
+
+                    if (extraLines && typeof extraLines === 'object') {
+                        extraLines.forEach((line) => {
+                            const element = document.createElement(
+                                line.type || 'p',
+                            )
+                            element.innerHTML = line.content
+                            arrayOfDomNodes.push(element)
+                        })
+                    }
+
+                    return { domNodes: arrayOfDomNodes }
+                },
                 eventDidMount,
                 eventWillUnmount,
                 events: (info, successCallback, failureCallback) => {
