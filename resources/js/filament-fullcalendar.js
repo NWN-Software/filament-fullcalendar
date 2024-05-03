@@ -1,20 +1,20 @@
-import { Calendar } from '@fullcalendar/core'
-import interactionPlugin from '@fullcalendar/interaction'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import timeGridPlugin from '@fullcalendar/timegrid'
-import listPlugin from '@fullcalendar/list'
-import multiMonthPlugin from '@fullcalendar/multimonth'
-import scrollGridPlugin from '@fullcalendar/scrollgrid'
-import timelinePlugin from '@fullcalendar/timeline'
-import adaptivePlugin from '@fullcalendar/adaptive'
-import resourcePlugin from '@fullcalendar/resource'
-import resourceDayGridPlugin from '@fullcalendar/resource-daygrid'
-import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
-import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
-import rrulePlugin from '@fullcalendar/rrule'
-import momentPlugin from '@fullcalendar/moment'
-import momentTimezonePlugin from '@fullcalendar/moment-timezone'
-import locales from '@fullcalendar/core/locales-all'
+import { Calendar } from "@fullcalendar/core";
+import interactionPlugin from "@fullcalendar/interaction";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import listPlugin from "@fullcalendar/list";
+import multiMonthPlugin from "@fullcalendar/multimonth";
+import scrollGridPlugin from "@fullcalendar/scrollgrid";
+import timelinePlugin from "@fullcalendar/timeline";
+import adaptivePlugin from "@fullcalendar/adaptive";
+import resourcePlugin from "@fullcalendar/resource";
+import resourceDayGridPlugin from "@fullcalendar/resource-daygrid";
+import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
+import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
+import rrulePlugin from "@fullcalendar/rrule";
+import momentPlugin from "@fullcalendar/moment";
+import momentTimezonePlugin from "@fullcalendar/moment-timezone";
+import locales from "@fullcalendar/core/locales-all";
 
 export default function fullcalendar({
     locale,
@@ -34,9 +34,9 @@ export default function fullcalendar({
             /** @type Calendar */
             const calendar = new Calendar(this.$el, {
                 headerToolbar: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,dayGridWeek,dayGridDay',
+                    left: "prev,next today",
+                    center: "title",
+                    right: "dayGridMonth,dayGridWeek,dayGridDay",
                 },
                 plugins: plugins.map((plugin) => availablePlugins[plugin]),
                 locale,
@@ -49,25 +49,25 @@ export default function fullcalendar({
                 eventClassNames,
                 eventContent: function (arg) {
                     let title = document.createElement(
-                        arg.event.extendedProps.titleElement || 'p',
-                    )
-                    title.innerHTML = arg.event.title
-                    let arrayOfDomNodes = [title]
+                        arg.event.extendedProps.titleElement || "p",
+                    );
+                    title.innerHTML = arg.event.title;
+                    let arrayOfDomNodes = [title];
 
                     const extraLines =
-                        arg.event.extendedProps?.extraLines || null
+                        arg.event.extendedProps?.extraLines || null;
 
-                    if (extraLines && typeof extraLines === 'object') {
+                    if (extraLines && typeof extraLines === "object") {
                         extraLines.forEach((line) => {
                             const element = document.createElement(
-                                line.type || 'p',
-                            )
-                            element.innerHTML = line.content
-                            arrayOfDomNodes.push(element)
-                        })
+                                line.type || "p",
+                            );
+                            element.innerHTML = line.content;
+                            arrayOfDomNodes.push(element);
+                        });
                     }
 
-                    return { domNodes: arrayOfDomNodes }
+                    return { domNodes: arrayOfDomNodes };
                 },
                 eventDidMount,
                 eventWillUnmount,
@@ -79,10 +79,10 @@ export default function fullcalendar({
                             timezone: info.timeZone,
                         })
                         .then(successCallback)
-                        .catch(failureCallback)
+                        .catch(failureCallback);
                 },
                 eventClick: ({ event, jsEvent }) => {
-                    jsEvent.preventDefault()
+                    jsEvent.preventDefault();
 
                     if (event.url) {
                         const isNotPlainLeftClick = (e) =>
@@ -90,17 +90,17 @@ export default function fullcalendar({
                             e.altKey ||
                             e.ctrlKey ||
                             e.metaKey ||
-                            e.shiftKey
+                            e.shiftKey;
                         return window.open(
                             event.url,
                             event.extendedProps.shouldOpenUrlInNewTab ||
                                 isNotPlainLeftClick(jsEvent)
-                                ? '_blank'
-                                : '_self',
-                        )
+                                ? "_blank"
+                                : "_self",
+                        );
                     }
 
-                    this.$wire.onEventClick(event)
+                    this.$wire.onEventClick(event);
                 },
                 eventDrop: async ({
                     event,
@@ -118,10 +118,10 @@ export default function fullcalendar({
                         delta,
                         oldResource,
                         newResource,
-                    )
+                    );
 
-                    if (typeof shouldRevert === 'boolean' && shouldRevert) {
-                        revert()
+                    if (typeof shouldRevert === "boolean" && shouldRevert) {
+                        revert();
                     }
                 },
                 eventResize: async ({
@@ -138,86 +138,101 @@ export default function fullcalendar({
                         relatedEvents,
                         startDelta,
                         endDelta,
-                    )
+                    );
 
-                    if (typeof shouldRevert === 'boolean' && shouldRevert) {
-                        revert()
+                    if (typeof shouldRevert === "boolean" && shouldRevert) {
+                        revert();
                     }
                 },
                 dateClick: ({ dateStr, allDay, view, resource }) => {
-                    if (!selectable) return
+                    if (!selectable) return;
                     this.$wire.onDateSelect(
                         dateStr,
                         null,
                         allDay,
                         view,
                         resource,
-                    )
+                    );
                 },
                 select: ({ startStr, endStr, allDay, view, resource }) => {
-                    if (!selectable) return
+                    if (!selectable) return;
                     this.$wire.onDateSelect(
                         startStr,
                         endStr,
                         allDay,
                         view,
                         resource,
-                    )
+                    );
                 },
-            })
+            });
 
-            calendar.render()
+            calendar.render();
 
-            window.addEventListener('filament-fullcalendar--refresh', () =>
+            window.addEventListener("filament-fullcalendar--refresh", () =>
                 calendar.refetchEvents(),
-            )
+            );
 
-            window.addEventListener('filament-fullcalendar--addEvent', (e) => {
-                const eventData = e.__livewire.params.shift()
-                console.log('eventdata', eventData)
+            window.addEventListener("filament-fullcalendar--addEvent", (e) => {
+                const eventData = e.__livewire.params.shift();
+                console.log("eventdata", eventData);
                 if (eventData) {
-                    calendar.addResource(eventData, true)
+                    calendar.addResource(eventData, true);
                 }
-            })
+            });
 
             window.addEventListener(
-                'filament-fullcalendar--deleteResource',
+                "filament-fullcalendar--deleteResource",
                 (e) => {
-                    const resourceId = e.__livewire.params.shift().toString()
-                    const resource = calendar.getResourceById(resourceId)
+                    const resourceId = e.__livewire.params.shift().toString();
+                    const resource = calendar.getResourceById(resourceId);
 
                     if (resource) {
-                        resource.remove()
+                        resource.remove();
                     }
                 },
-            )
+            );
 
             window.addEventListener(
-                'filament-fullcalendar--updateResourceParent',
+                "filament-fullcalendar--updateResourceParent",
                 (e) => {
-                    const data = e.__livewire.params.shift()
-                    const resource = calendar.getResourceById(data.resourceId)
-
+                    const data = e.__livewire.params.shift();
+                    const resource = calendar.getResourceById(data.resourceId);
                     if (resource) {
-                        resource.setProp('parentId', data.parentId)
+                        resource.setProp("parentId", data.parentId);
+
+                        if (data.title !== resource.title) {
+                            resource.setProp('title', data.title);
+                        }
                     }
                 },
-            )
+            );
 
             window.addEventListener(
-                'filament-fullcalendar--updateEventresource',
+                "filament-fullcalendar--updateEventTitle",
                 (e) => {
-                    const data = e.__livewire.params.shift()
-                    const event = calendar.getEventById(data.eventId)
+                    const data = e.__livewire.params.shift();
+                    const event = calendar.getEventById( data.eventId );
+
+                    if (event && data.title !== event.title) {
+                        event.setProp('title', data.title);
+                    }
+                },
+            );
+
+            window.addEventListener(
+                "filament-fullcalendar--updateEventResource",
+                (e) => {
+                    const data = e.__livewire.params.shift();
+                    const event = calendar.getEventById(data.eventId);
 
                     if (event) {
-                        event.setExtendedProp('resourceId', data.resourceId)
-                        calendar.refetchEvents()
+                        event.setExtendedProp("resourceId", data.resourceId);
+                        calendar.refetchEvents();
                     }
                 },
-            )
+            );
         },
-    }
+    };
 }
 
 const availablePlugins = {
@@ -236,4 +251,4 @@ const availablePlugins = {
     rrule: rrulePlugin,
     moment: momentPlugin,
     momentTimezone: momentTimezonePlugin,
-}
+};

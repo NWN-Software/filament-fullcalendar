@@ -47,4 +47,5 @@ compile({
     ...defaultOptions,
     entryPoints: ['./resources/js/filament-fullcalendar.js'],
     outfile: './dist/filament-fullcalendar.js',
+    // outfile: '../../public/js/saade/filament-fullcalendar/components/filament-fullcalendar-alpine.js',
 })
