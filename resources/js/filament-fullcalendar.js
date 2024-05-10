@@ -31,6 +31,8 @@ export default function fullcalendar({
 }) {
     return {
         init() {
+            console.log('Init calendar')
+
             /** @type Calendar */
             const calendar = new Calendar(this.$el, {
                 headerToolbar: {
@@ -218,18 +220,6 @@ export default function fullcalendar({
                         if (data.title !== resource.title) {
                             resource.setProp('title', data.title)
                         }
-                    }
-                },
-            )
-
-            window.addEventListener(
-                'filament-fullcalendar--updateEventTitle',
-                (e) => {
-                    const data = e.__livewire.params.shift()
-                    const event = calendar.getEventById(data.eventId)
-
-                    if (event && data.title !== event.title) {
-                        event.setProp('title', data.title)
                     }
                 },
             )
