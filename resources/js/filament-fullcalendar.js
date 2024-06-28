@@ -31,8 +31,6 @@ export default function fullcalendar({
 }) {
     return {
         init() {
-            console.log('Init calendar')
-
             /** @type Calendar */
             const calendar = new Calendar(this.$el, {
                 headerToolbar: {
@@ -241,6 +239,23 @@ export default function fullcalendar({
 
                     if (data.extraLines !== event.extendedProps.extraLines) {
                         event.setExtendedProp('extraLines', data.extraLines)
+                    }
+                },
+            )
+
+            window.addEventListener(
+                'filament-fullcalendar--updateDate',
+                (e) => {
+                    const data = e.__livewire.params.shift()
+
+                    const event = calendar.getEventById(data.id)
+
+                    if (!event) {
+                        return
+                    }
+
+                    if (data.start !== event.start || data.end !== event.end) {
+                        event.setDates(data.start, data.end);
                     }
                 },
             )
