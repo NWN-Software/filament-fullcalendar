@@ -1,5 +1,4 @@
 import { Calendar } from '@fullcalendar/core'
-import interactionPlugin from '@fullcalendar/interaction'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import listPlugin from '@fullcalendar/list'
@@ -15,6 +14,7 @@ import rrulePlugin from '@fullcalendar/rrule'
 import momentPlugin from '@fullcalendar/moment'
 import momentTimezonePlugin from '@fullcalendar/moment-timezone'
 import locales from '@fullcalendar/core/locales-all'
+import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
 
 export default function fullcalendar({
     locale,
@@ -102,6 +102,19 @@ export default function fullcalendar({
 
                     this.$wire.onEventClick(event)
                 },
+                eventReceive: async ({
+                    event,
+                    revert,
+                }) => {
+                    const shouldRevert = await this.$wire.onEventReceive(
+                        event,
+                        event.getResources(),
+                    )
+
+                    if (typeof shouldRevert === 'boolean' && shouldRevert) {
+                        revert()
+                    }
+                },
                 eventDrop: async ({
                     event,
                     oldEvent,
@@ -179,6 +192,11 @@ export default function fullcalendar({
                         .appendChild(questionMark)
                 },
             })
+
+            new Draggable(document.querySelector("#daycalendar"), {
+                itemSelector: '.drag'
+            });
+
 
             calendar.render()
 
