@@ -193,9 +193,11 @@ export default function fullcalendar({
                 },
             })
 
-            new Draggable(document.querySelector("#daycalendar"), {
-                itemSelector: '.drag'
-            });
+            if (document.querySelector("#daycalendar")) {
+                new Draggable(document.querySelector("#daycalendar"), {
+                    itemSelector: '.drag'
+                });
+            }
 
 
             calendar.render()

@@ -59,4 +59,9 @@ class FullCalendarWidget extends Widget implements HasForms, HasActions
     {
         return [];
     }
+
+    public function onEventResize(array $event, array $oldEvent, array $relatedEvents, array $startDelta, array $endDelta): bool
+    {
+        return false;
+    }
 }
