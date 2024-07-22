@@ -117,6 +117,7 @@ export default function fullcalendar({
                 },
                 eventDrop: async ({
                     event,
+                    jsEvent,
                     oldEvent,
                     relatedEvents,
                     delta,
@@ -124,6 +125,8 @@ export default function fullcalendar({
                     newResource,
                     revert,
                 }) => {
+                    const copyEvent = jsEvent.ctrlKey || jsEvent.metaKey;
+
                     const shouldRevert = await this.$wire.onEventDrop(
                         event,
                         oldEvent,
@@ -131,6 +134,7 @@ export default function fullcalendar({
                         delta,
                         oldResource,
                         newResource,
+                        jsEvent.shiftKey,
                     )
 
                     if (typeof shouldRevert === 'boolean' && shouldRevert) {
@@ -290,6 +294,16 @@ export default function fullcalendar({
                         event.setExtendedProp('resourceId', data.resourceId)
                         calendar.refetchEvents()
                     }
+                },
+            )
+
+            window.addEventListener(
+                'filament-fullcalendar--addResourceToEvent',
+                (e) => {
+                    const data = e.__livewire.params.shift()
+                    const event = calendar.getEventById(data.eventId)
+                    const resourceId = calendar.getResourceById(data.resourceId)
+                    event.setResources([...event.getResources(), resourceId])
                 },
             )
         },
