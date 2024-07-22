@@ -127,6 +127,12 @@ export default function fullcalendar({
                 }) => {
                     const copyEvent = jsEvent.ctrlKey || jsEvent.metaKey;
 
+                    if (jsEvent.shiftKey) {
+                        revert()
+                        oldEvent.setResources([...oldEvent.getResources(), ...event.getResources()])
+                        oldEvent.setDates(event.start, event.end);
+                    }
+
                     const shouldRevert = await this.$wire.onEventDrop(
                         event,
                         oldEvent,
