@@ -125,9 +125,24 @@ export default function fullcalendar({
                     newResource,
                     revert,
                 }) => {
-                    const copyEvent = jsEvent.ctrlKey || jsEvent.metaKey;
+                    const copyEvent = jsEvent.ctrlKey || jsEvent.metaKey || jsEvent.altKey;
 
-                    if (jsEvent.shiftKey) {
+                    if (copyEvent) {
+                        revert();
+
+                        const shouldRevert = await this.$wire.onEventCopy(
+                            event,
+                            oldEvent,
+                            relatedEvents,
+                            delta,
+                            oldResource,
+                            newResource
+                        )
+
+                        return;
+                    }
+
+                    if (jsEvent.shiftKey) { 
                         revert()
                         oldEvent.setResources([...oldEvent.getResources(), ...event.getResources()])
                         oldEvent.setDates(event.start, event.end);
@@ -220,7 +235,7 @@ export default function fullcalendar({
                 const eventData = e.__livewire.params.shift()
 
                 if (eventData) {
-                    calendar.addResource(eventData, true)
+                    calendar.addEvent(eventData, true)
                 }
             })
 
