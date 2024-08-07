@@ -72,9 +72,7 @@ export default function fullcalendar({
                     return { domNodes: arrayOfDomNodes }
                 },
                 eventDidMount: (arg) => {
-                    if (!contextMenu) return;
-
-                    if (arg.event.display === "background") return;
+                    if (!contextMenu || arg.event.display === "background" || !arg.event._def.resourceEditable) return;
 
                     const eventId = arg.event.id;
 
