@@ -31,6 +31,8 @@ export default function fullcalendar({
 }) {
     return {
         init() {
+            const contextMenu = document.getElementById('contextMenu');
+
             /** @type Calendar */
             const calendar = new Calendar(this.$el, {
                 headerToolbar: {
@@ -69,7 +71,30 @@ export default function fullcalendar({
 
                     return { domNodes: arrayOfDomNodes }
                 },
-                eventDidMount,
+                eventDidMount: (arg) => {
+                    if (!contextMenu) return;
+
+                    if (arg.event.display === "background") return;
+
+                    const eventId = arg.event.id;
+
+                    arg.el.addEventListener("contextmenu", (jsEvent)=>{
+                        jsEvent.preventDefault()
+
+                        this.$wire.setContextMenuEvent(eventId);
+
+                        contextMenu.style.display = 'block'; // Show the context menu
+                        contextMenu.style.opacity = '0';
+
+                        let closeChildrenContextMenu = new Event('close-children-context-menu');
+                        dispatchEvent(closeChildrenContextMenu);
+                        
+                        setTimeout(function () {
+                            calculateContextMenuPosition(jsEvent);
+                            contextMenu.style.opacity = '1';
+                        }, 0); // Similar to $nextTick
+                    })
+                },
                 eventWillUnmount,
                 events: (info, successCallback, failureCallback) => {
                     this.$wire
@@ -289,6 +314,17 @@ export default function fullcalendar({
             )
 
             window.addEventListener(
+                'filament-fullcalendar--updateColor',
+                (e) => {
+                    const data = e.__livewire.params.shift()
+
+                    const event = calendar.getEventById(data.id)
+
+                    event.setProp('color', data.color)
+                },
+            )
+
+            window.addEventListener(
                 'filament-fullcalendar--updateDate',
                 (e) => {
                     const data = e.__livewire.params.shift()
@@ -327,6 +363,42 @@ export default function fullcalendar({
                     event.setResources([...event.getResources(), resourceId])
                 },
             )
+
+            window.addEventListener('filament-fullcalendar--prev', () => calendar.prev())
+            window.addEventListener('filament-fullcalendar--next', () => calendar.next())
+            window.addEventListener('filament-fullcalendar--today', () => calendar.today())
+            window.addEventListener('filament-fullcalendar--goto', (event) => calendar.gotoDate(event.detail.date))
+
+
+            if (contextMenu) {
+                document.addEventListener('close-parent-context-menu', function(event) {
+                    contextMenu.style.display = 'none'; // Show the context menu
+                    contextMenu.style.opacity = '0';
+                })
+
+                document.addEventListener('click', function (event) {
+                    if (!contextMenu.contains(event.target)) {
+                        contextMenu.style.display = 'none'; // Hide the context menu
+                    }
+                });
+
+                window.addEventListener('resize', function (event) {
+                    contextMenu.style.display = 'none';
+                });
+            }
+
+            function calculateContextMenuPosition(clickEvent) {
+                var menuHeight = contextMenu.offsetHeight;
+                var menuWidth = contextMenu.offsetWidth;
+
+                var top = window.innerHeight < clickEvent.clientY + menuHeight ?
+                    (window.innerHeight - menuHeight) : clickEvent.clientY;
+                var left = window.innerWidth < clickEvent.clientX + menuWidth ?
+                    (clickEvent.clientX - menuWidth) : clickEvent.clientX;
+
+                contextMenu.style.top = top + 'px';
+                contextMenu.style.left = left + 'px';
+            }
         },
     }
 }

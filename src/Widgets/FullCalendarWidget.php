@@ -9,21 +9,23 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Widgets\Widget;
 use Saade\FilamentFullCalendar\Actions;
+use Saade\FilamentFullCalendar\Traits\PageHasContextMenu;
 
-class FullCalendarWidget extends Widget implements HasForms, HasActions
+class FullCalendarWidget extends Widget implements HasActions, HasForms
 {
-    use InteractsWithForms;
-    use InteractsWithActions;
+    use Concerns\CanBeConfigured;
     use Concerns\InteractsWithEvents;
-    use Concerns\InteractsWithRecords;
     use Concerns\InteractsWithHeaderActions;
     use Concerns\InteractsWithModalActions;
     use Concerns\InteractsWithRawJS;
-    use Concerns\CanBeConfigured;
+    use Concerns\InteractsWithRecords;
+    use InteractsWithActions;
+    use InteractsWithForms;
+    use PageHasContextMenu;
 
     protected static string $view = 'filament-fullcalendar::fullcalendar';
 
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 'full';
 
     protected function headerActions(): array
     {
@@ -48,7 +50,8 @@ class FullCalendarWidget extends Widget implements HasForms, HasActions
     /**
      * FullCalendar will call this function whenever it needs new event data.
      * This is triggered when the user clicks prev/next or switches views.
-     * @param array{start: string, end: string, timezone: string} $info
+     *
+     * @param  array{start: string, end: string, timezone: string}  $info
      */
     public function fetchEvents(array $info): array
     {
