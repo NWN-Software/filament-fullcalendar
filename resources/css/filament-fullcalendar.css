@@ -92,3 +92,7 @@ html.dark .filament-fullcalendar {
 .filament-fullcalendar .fc-list-sticky .fc-list-day th {
     @apply bg-inherit;
 }
+
+.fc-event {
+    position: relative;
+}
