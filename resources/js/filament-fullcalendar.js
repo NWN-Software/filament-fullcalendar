@@ -396,6 +396,18 @@ export default function fullcalendar({
                 },
             )
 
+            window.addEventListener(
+                'filament-fullcalendar--addResource',
+                (e) => {
+                    const data = e.__livewire.params.shift()
+                    calendar.addResource({
+                        id: data.resourceId,
+                        title: data.title,
+                        parentId: data.parentId,
+                    });
+                },
+            )
+
             window.addEventListener('filament-fullcalendar--prev', () => calendar.prev())
             window.addEventListener('filament-fullcalendar--next', () => calendar.next())
             window.addEventListener('filament-fullcalendar--today', () => calendar.today())
