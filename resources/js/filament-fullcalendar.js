@@ -400,11 +400,16 @@ export default function fullcalendar({
                 'filament-fullcalendar--addResource',
                 (e) => {
                     const data = e.__livewire.params.shift()
-                    calendar.addResource({
-                        id: data.resourceId,
-                        title: data.title,
-                        parentId: data.parentId,
-                    });
+                    const resourceData = {
+                      id: data.resourceId,
+                      title: data.title,
+                    };
+                    
+                    if (data.parentId) {
+                      resourceData.parentId = data.parentId;
+                    }
+                    
+                    calendar.addResource(resourceData);
                 },
             )
 
