@@ -297,6 +297,15 @@ export default function fullcalendar({
                 }
             })
 
+            window.addEventListener('filament-fullcalendar--deleteEvent', (e) => {
+                const eventId = e.__livewire.params.shift()
+                const event = calendar.getEventById(eventId)
+
+                if (event) {
+                    event.remove()
+                }
+            })
+
             window.addEventListener(
                 'filament-fullcalendar--deleteResource',
                 (e) => {
