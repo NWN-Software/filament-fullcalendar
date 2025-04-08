@@ -23,6 +23,7 @@
                 eventContent: {!! htmlspecialchars($this->eventContent(), ENT_COMPAT) !!},
                 eventDidMount: {!! htmlspecialchars($this->eventDidMount(), ENT_COMPAT) !!},
                 eventWillUnmount: {!! htmlspecialchars($this->eventWillUnmount(), ENT_COMPAT) !!},
+                resourceLabelDidMount: {!! htmlspecialchars($this->resourceLabelDidMount(), ENT_COMPAT) !!},
             })">
         </div>
     </x-filament::section>
