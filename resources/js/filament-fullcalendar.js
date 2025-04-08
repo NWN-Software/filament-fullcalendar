@@ -401,6 +401,7 @@ export default function fullcalendar({
                     const resourceData = {
                       id: data.resourceId,
                       title: data.title,
+                      extendedProps: data.extendedProps
                     };
                     
                     if (data.parentId) {
