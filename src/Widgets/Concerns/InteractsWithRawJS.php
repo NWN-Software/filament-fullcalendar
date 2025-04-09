@@ -61,4 +61,12 @@ trait InteractsWithRawJS
             null
         JS;
     }
+
+
+    public function resourceLabelDidMount(): string
+    {
+        return <<<JS
+            null
+        JS;
+    }
 }
