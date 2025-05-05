@@ -29,6 +29,7 @@ export default function fullcalendar({
     eventDidMount,
     eventWillUnmount,
     resourceLabelDidMount,
+    loading,
 }) {
     return {
         init() {
@@ -50,6 +51,9 @@ export default function fullcalendar({
                 ...config,
                 locales,
                 eventClassNames,
+                loading: (isLoading) => {
+                    this.loading = isLoading;
+                },
                 eventContent: function (arg) {
                     let title = document.createElement(
                         arg.event.extendedProps.titleElement || 'p',

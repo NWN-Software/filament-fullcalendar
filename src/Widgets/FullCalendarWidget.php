@@ -27,6 +27,8 @@ class FullCalendarWidget extends Widget implements HasActions, HasForms
 
     protected int|string|array $columnSpan = 'full';
 
+    public bool $loading = false;
+
     protected function headerActions(): array
     {
         return [

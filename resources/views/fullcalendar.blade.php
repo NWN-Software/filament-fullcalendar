@@ -43,7 +43,8 @@
                 {{ __('resources/activities.move_overlapping_activities') }}
             </x-filament::button>
 
-            <x-filament::button color="gray" x-on:click="$dispatch('close-modal', { id: 'overlapping-activities-modal' })" class="w-full">
+            <x-filament::button color="gray"
+                x-on:click="$dispatch('close-modal', { id: 'overlapping-activities-modal' })" class="w-full">
                 {{ __('resources/activities.cancel') }}
             </x-filament::button>
         </x-slot>
