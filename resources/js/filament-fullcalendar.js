@@ -399,6 +399,20 @@ export default function fullcalendar({
             )
 
             window.addEventListener(
+                'filament-fullcalendar--removeResourceFromEvent',
+                (e) => {
+                    const data = e.__livewire.params.shift()
+                    const event = calendar.getEventById(data.eventId)
+                    const removedResource = calendar.getResourceById(data.resourceId)
+                    const eventResources = event.getResources()
+                    const updatedResources = eventResources.filter(resource => 
+                        resource.id !== removedResource.id
+                    )
+                    event.setResources(updatedResources)
+                }            
+            )
+
+            window.addEventListener(
                 'filament-fullcalendar--addResource',
                 (e) => {
                     const data = e.__livewire.params.shift()
