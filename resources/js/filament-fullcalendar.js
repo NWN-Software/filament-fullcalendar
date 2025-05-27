@@ -111,6 +111,10 @@ export default function fullcalendar({
                     return { domNodes: arrayOfDomNodes }
                 },
                 eventDidMount: (arg) => {
+                    if (arg.event.extendedProps.tooltip) {
+                        arg.el.setAttribute("x-tooltip", "tooltip");
+                        arg.el.setAttribute("x-data", "{ tooltip: '"+arg.event.extendedProps.tooltip+"'}");
+                    }
 
                     if (!arg.isDragging && (!contextMenu || arg.event.display === "background" || arg.event._def.resourceEditable === false)) return;
 
