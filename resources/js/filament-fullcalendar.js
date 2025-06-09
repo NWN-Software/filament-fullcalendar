@@ -348,6 +348,10 @@ export default function fullcalendar({
                     if (data.extraLines !== event.extendedProps.extraLines) {
                         event.setExtendedProp('extraLines', data.extraLines)
                     }
+
+                    if (data.expandableLines !== event.extendedProps.expandableLines) {
+                        event.setExtendedProp('expandableLines', data.expandableLines)
+                    }
                 },
             )
 
