@@ -269,6 +269,11 @@ export default function fullcalendar({
                         resource,
                     )
                 },
+                viewClassNames: (arg) => {
+                    this.$wire.onViewChanged({
+                        viewType: arg.view.type
+                    })
+                },
                 resourceLabelDidMount,
             })
 
