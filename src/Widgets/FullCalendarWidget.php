@@ -69,4 +69,9 @@ class FullCalendarWidget extends Widget implements HasActions, HasForms
     {
         return false;
     }
+
+    public function onViewChanged(array $view)
+    {
+        return $view['viewType'];
+    }
 }
