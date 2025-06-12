@@ -61,8 +61,7 @@ export default function fullcalendar({
                     title.innerHTML = arg.event.title
                     let arrayOfDomNodes = [title]
 
-                    const extraLines =
-                        arg.event.extendedProps?.extraLines || null
+                    const extraLines = arg.event.extendedProps?.extraLines || null
 
                     if (extraLines && typeof extraLines === 'object') {
                         extraLines.forEach((line) => {
@@ -106,6 +105,37 @@ export default function fullcalendar({
                         };
 
                         arrayOfDomNodes.push(toggle);
+                    }
+
+                                        const tags = arg.event.extendedProps?.tags || null;
+
+                    let tagsContainer = null
+                    
+                    if (tags) {
+                        tagsContainer = document.createElement('div')
+                        tagsContainer.classList.add(
+                            'flex',
+                            'items-center',
+                            'gap-1',
+                            'activity-tags',
+                            'm-1'
+                        )
+                        tags.forEach((tag) => {
+                            const tagElement = document.createElement('div')
+                            tagElement.classList.add(
+                                'w-4',
+                                'h-4',
+                                'rounded-full',
+                                'border',
+                                'border-white',
+                            )
+                            tagElement.style.backgroundColor = tag.color
+                            tagsContainer.appendChild(tagElement)
+                        })
+                    }
+
+                    if (tagsContainer) {
+                        arrayOfDomNodes.push(tagsContainer)
                     }
 
                     return { domNodes: arrayOfDomNodes }
@@ -356,6 +386,10 @@ export default function fullcalendar({
 
                     if (data.expandableLines !== event.extendedProps.expandableLines) {
                         event.setExtendedProp('expandableLines', data.expandableLines)
+                    }
+
+                    if (data.tags !== event.extendedProps.tags) {
+                        event.setExtendedProp('tags', data.tags)
                     }
                 },
             )
