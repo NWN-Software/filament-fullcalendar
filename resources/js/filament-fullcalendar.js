@@ -121,7 +121,7 @@ export default function fullcalendar({
                             'm-1'
                         )
                         tags.forEach((tag) => {
-                            const tagElement = document.createElement('div')
+                            const tagElement = document.createElement('span')
                             tagElement.classList.add(
                                 'w-4',
                                 'h-4',
