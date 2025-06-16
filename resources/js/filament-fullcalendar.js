@@ -224,9 +224,23 @@ export default function fullcalendar({
                 }) => {
                     const copyEvent = jsEvent.ctrlKey || jsEvent.metaKey || jsEvent.altKey;
 
-                    if (copyEvent) {
-                        revert();
 
+                    const hasSunday = config.hiddenDays.includes(0);
+                    const hasSaturday = config.hiddenDays.includes(6);
+
+                    if (copyEvent) {
+                        const originalStart = oldEvent.start;
+                        const originalEnd   = oldEvent.end   || oldEvent.start; 
+                        const businessDays  = countBusinessDays(originalStart, originalEnd, hasSunday, hasSaturday);
+
+                        const newStartDate = addBusinessDays(event.start, 0, hasSunday, hasSaturday);
+                        const provisionalEndDate = addBusinessDays(event.start, businessDays, hasSunday, hasSaturday);
+
+                        const newStart = applyTime(newStartDate, originalStart);
+                        const newEnd   = applyTime(provisionalEndDate, originalEnd);
+                        event.setDates(newStart, newEnd);
+
+                        revert()
                         const shouldRevert = await this.$wire.onEventCopy(
                             event,
                             oldEvent,
@@ -239,11 +253,23 @@ export default function fullcalendar({
                         return;
                     }
 
+                    const originalStart = oldEvent.start;
+                    const originalEnd   = oldEvent.end   || oldEvent.start; 
+                    const businessDays  = countBusinessDays(originalStart, originalEnd, hasSunday, hasSaturday);
+
+                    const newStartDate = addBusinessDays(event.start, 0, hasSunday, hasSaturday);
+                    const provisionalEndDate = addBusinessDays(event.start, businessDays, hasSunday, hasSaturday);
+
+                    const newStart = applyTime(newStartDate, originalStart);
+                    const newEnd   = applyTime(provisionalEndDate, originalEnd);
+                    event.setDates(newStart, newEnd);
+                    
                     if (jsEvent.shiftKey) { 
                         revert()
                         oldEvent.setResources([...oldEvent.getResources(), ...event.getResources()])
                         oldEvent.setDates(event.start, event.end);
                     }
+
 
                     const shouldRevert = await this.$wire.onEventDrop(
                         event,
@@ -532,4 +558,50 @@ const availablePlugins = {
     rrule: rrulePlugin,
     moment: momentPlugin,
     momentTimezone: momentTimezonePlugin,
+}
+
+
+
+function isWeekend(
+  d,
+  shouldCountSundayAsWeekend   = true,
+  shouldCountSaturdayAsWeekend = true
+) {
+  const wd = d.getDay();
+  return (wd === 0 && shouldCountSundayAsWeekend)
+      || (wd === 6 && shouldCountSaturdayAsWeekend);
+}
+
+function countBusinessDays(start, end, shouldCountSundayAsWeekend = true, shouldCountSaturdayAsWeekend = true) {
+    const cur = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+    const last = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+    let count = 0;
+    while (cur < last) {
+        if (!isWeekend(cur, shouldCountSundayAsWeekend, shouldCountSaturdayAsWeekend)) count++;
+        cur.setDate(cur.getDate() + 1);
+    }
+    return count;
+}
+
+function addBusinessDays(start, businessDays, shouldCountSundayAsWeekend = true, shouldCountSaturdayAsWeekend = true) {
+    const result = new Date(start);
+    let added = 0;
+    while (added < businessDays) {
+        result.setDate(result.getDate() + 1);
+        if (!isWeekend(result, shouldCountSundayAsWeekend, shouldCountSaturdayAsWeekend)) {
+            added++;
+        }
+    }
+    return result;
+}
+
+function applyTime(targetDate, sourceDate) {
+  const d = new Date(targetDate);
+  d.setHours(
+    sourceDate.getHours(),
+    sourceDate.getMinutes(),
+    sourceDate.getSeconds(),
+    sourceDate.getMilliseconds()
+  );
+  return d;
 }
