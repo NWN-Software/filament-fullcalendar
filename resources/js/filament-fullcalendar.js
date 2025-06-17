@@ -231,14 +231,26 @@ export default function fullcalendar({
                     if (copyEvent) {
                         const originalStart = oldEvent.start;
                         const originalEnd   = oldEvent.end   || oldEvent.start; 
-                        const businessDays  = countBusinessDays(originalStart, originalEnd, hasSunday, hasSaturday);
+                        const businessDays = countBusinessDays(originalStart, originalEnd, hasSunday, hasSaturday)
 
-                        const newStartDate = addBusinessDays(event.start, 0, hasSunday, hasSaturday);
-                        const provisionalEndDate = addBusinessDays(event.start, businessDays, hasSunday, hasSaturday);
+                        const parsedOriginalEnd = new Date(event.end);
+                        const newStart = event.start;
+                        const newEnd = addBusinessDays(event.start, businessDays, hasSunday, hasSaturday);
+                        
+                        newEnd.setHours(parsedOriginalEnd.getHours(), parsedOriginalEnd.getMinutes(), parsedOriginalEnd.getSeconds(), parsedOriginalEnd.getMilliseconds());
+                        let newStartDay = new Date(newStart);
 
-                        const newStart = applyTime(newStartDate, originalStart);
-                        const newEnd   = applyTime(provisionalEndDate, originalEnd);
-                        event.setDates(newStart, newEnd);
+                        if (newStartDay.getDay() === 0 && hasSunday) {
+                            console.log('newStartDay sunday', newStartDay);
+                            newStartDay.setDate(newStartDay.getDate() - 1);
+                        }
+
+                        if (newStartDay.getDay() === 6 && hasSaturday) {
+                            console.log('newStartDay saturday', newStartDay);
+                            newStartDay.setDate(newStartDay.getDate() - 1);
+                        }
+
+                        event.setDates(newStartDay, newEnd);
 
                         revert()
                         const shouldRevert = await this.$wire.onEventCopy(
@@ -253,16 +265,30 @@ export default function fullcalendar({
                         return;
                     }
 
+
                     const originalStart = oldEvent.start;
                     const originalEnd   = oldEvent.end   || oldEvent.start; 
-                    const businessDays  = countBusinessDays(originalStart, originalEnd, hasSunday, hasSaturday);
+                    const businessDays = countBusinessDays(originalStart, originalEnd, hasSunday, hasSaturday)
 
-                    const newStartDate = addBusinessDays(event.start, 0, hasSunday, hasSaturday);
-                    const provisionalEndDate = addBusinessDays(event.start, businessDays, hasSunday, hasSaturday);
+                    const parsedOriginalEnd = new Date(event.end);
+                    const newStart = event.start;
+                    const newEnd = addBusinessDays(event.start, businessDays, hasSunday, hasSaturday);
+                    
+                    newEnd.setHours(parsedOriginalEnd.getHours(), parsedOriginalEnd.getMinutes(), parsedOriginalEnd.getSeconds(), parsedOriginalEnd.getMilliseconds());
+                    let newStartDay = new Date(newStart);
 
-                    const newStart = applyTime(newStartDate, originalStart);
-                    const newEnd   = applyTime(provisionalEndDate, originalEnd);
-                    event.setDates(newStart, newEnd);
+                    if (newStartDay.getDay() === 0 && hasSunday) {
+                        console.log('newStartDay sunday', newStartDay);
+                        newStartDay.setDate(newStartDay.getDate() - 1);
+                    }
+
+                    if (newStartDay.getDay() === 6 && hasSaturday) {
+                        console.log('newStartDay saturday', newStartDay);
+                        newStartDay.setDate(newStartDay.getDate() - 1);
+                    }
+
+                    event.setDates(newStartDay, newEnd);
+
                     
                     if (jsEvent.shiftKey) { 
                         revert()
@@ -593,15 +619,4 @@ function addBusinessDays(start, businessDays, shouldCountSundayAsWeekend = true,
         }
     }
     return result;
-}
-
-function applyTime(targetDate, sourceDate) {
-  const d = new Date(targetDate);
-  d.setHours(
-    sourceDate.getHours(),
-    sourceDate.getMinutes(),
-    sourceDate.getSeconds(),
-    sourceDate.getMilliseconds()
-  );
-  return d;
 }
