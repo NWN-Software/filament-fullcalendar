@@ -14,6 +14,8 @@ trait PageHasContextMenu
 
     public string|int|null $eventId = null;
 
+    public bool $enableReactiveContextMenu = false;
+
     public ?Model $contextModel = null;
 
     public function bootedPageHasContextMenu(): void
@@ -59,8 +61,10 @@ trait PageHasContextMenu
             return false;
         }
 
-        $this->cachedContextMenuActions = [];
-        $this->cacheContextMenuActions();
+        if ($this->enableReactiveContextMenu) {
+            $this->cachedContextMenuActions = [];
+            $this->cacheContextMenuActions();
+        }
 
         return true;
     }
