@@ -153,18 +153,20 @@ export default function fullcalendar({
                     arg.el.addEventListener("contextmenu", (jsEvent)=>{
                         jsEvent.preventDefault()
 
-                        this.$wire.setContextMenuEvent(eventId);
-
-                        contextMenu.style.display = 'block'; // Show the context menu
-                        contextMenu.style.opacity = '0';
-
-                        let closeChildrenContextMenu = new Event('close-children-context-menu');
-                        dispatchEvent(closeChildrenContextMenu);
-                        
-                        setTimeout(function () {
-                            calculateContextMenuPosition(jsEvent);
-                            contextMenu.style.opacity = '1';
-                        }, 0); // Similar to $nextTick
+                        this.$wire.setContextMenuEvent(eventId).then((returnValue) => {
+                            if (returnValue) {
+                                contextMenu.style.display = 'block'; // Show the context menu
+                                contextMenu.style.opacity = '0';
+        
+                                let closeChildrenContextMenu = new Event('close-children-context-menu');
+                                dispatchEvent(closeChildrenContextMenu);
+                                
+                                setTimeout(function () {
+                                    calculateContextMenuPosition(jsEvent);
+                                    contextMenu.style.opacity = '1';
+                                }, 0); // Similar to $nextTick
+                            }
+                        });
                     })
                 },
                 eventWillUnmount,

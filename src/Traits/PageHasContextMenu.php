@@ -50,9 +50,14 @@ trait PageHasContextMenu
             && count($this->getContextMenuActions());
     }
 
-    public function setContextMenuEvent(string|int|null $eventId): void
+    public function setContextMenuEvent(string|int|null $eventId): bool
     {
         $this->eventId = $eventId;
         $this->contextModel = $eventId ? $this->resolveRecord($eventId) : null;
+
+        $this->cachedContextMenuActions = [];
+        $this->cacheContextMenuActions();
+
+        return true;
     }
 }
