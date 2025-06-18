@@ -55,6 +55,10 @@ trait PageHasContextMenu
         $this->eventId = $eventId;
         $this->contextModel = $eventId ? $this->resolveRecord($eventId) : null;
 
+        if (! $this->contextModel) {
+            return false;
+        }
+
         $this->cachedContextMenuActions = [];
         $this->cacheContextMenuActions();
 
