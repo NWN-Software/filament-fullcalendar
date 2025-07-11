@@ -138,6 +138,17 @@ export default function fullcalendar({
                         arrayOfDomNodes.push(tagsContainer)
                     }
 
+                    if (arg.event.id.startsWith('recurring-work-order-')) {
+                        const toggle = document.createElement('button');
+                        toggle.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" > <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" /> </svg>';
+                        toggle.style.position = 'absolute';
+                        toggle.style.top = '4px';
+                        toggle.style.zIndex = '1000';
+                        toggle.style.right = '2px';
+
+                        arrayOfDomNodes.push(toggle)
+                    }
+
                     return { domNodes: arrayOfDomNodes }
                 },
                 eventDidMount: (arg) => {
@@ -243,12 +254,10 @@ export default function fullcalendar({
                         let newStartDay = new Date(newStart);
 
                         if (newStartDay.getDay() === 0 && hasSunday) {
-                            console.log('newStartDay sunday', newStartDay);
                             newStartDay.setDate(newStartDay.getDate() - 1);
                         }
 
                         if (newStartDay.getDay() === 6 && hasSaturday) {
-                            console.log('newStartDay saturday', newStartDay);
                             newStartDay.setDate(newStartDay.getDate() - 1);
                         }
 
@@ -280,12 +289,10 @@ export default function fullcalendar({
                     let newStartDay = new Date(newStart);
 
                     if (newStartDay.getDay() === 0 && hasSunday) {
-                        console.log('newStartDay sunday', newStartDay);
                         newStartDay.setDate(newStartDay.getDate() - 1);
                     }
 
                     if (newStartDay.getDay() === 6 && hasSaturday) {
-                        console.log('newStartDay saturday', newStartDay);
                         newStartDay.setDate(newStartDay.getDate() - 1);
                     }
 

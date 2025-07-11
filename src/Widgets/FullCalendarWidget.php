@@ -74,4 +74,9 @@ class FullCalendarWidget extends Widget implements HasActions, HasForms
     {
         return $view['viewType'];
     }
+
+    public function getRecurringEvents(): array
+    {
+        return [];
+    }
 }
