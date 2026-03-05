@@ -2,6 +2,16 @@
 
 namespace Saade\FilamentFullCalendar\Widgets;
 
+use Saade\FilamentFullCalendar\Widgets\Concerns\CanBeConfigured;
+use Saade\FilamentFullCalendar\Widgets\Concerns\InteractsWithEvents;
+use Saade\FilamentFullCalendar\Widgets\Concerns\InteractsWithHeaderActions;
+use Saade\FilamentFullCalendar\Widgets\Concerns\InteractsWithModalActions;
+use Saade\FilamentFullCalendar\Widgets\Concerns\InteractsWithRawJS;
+use Saade\FilamentFullCalendar\Widgets\Concerns\InteractsWithRecords;
+use Saade\FilamentFullCalendar\Actions\CreateAction;
+use Saade\FilamentFullCalendar\Actions\EditAction;
+use Saade\FilamentFullCalendar\Actions\DeleteAction;
+use Saade\FilamentFullCalendar\Actions\ViewAction;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
@@ -13,17 +23,17 @@ use Saade\FilamentFullCalendar\Traits\PageHasContextMenu;
 
 class FullCalendarWidget extends Widget implements HasActions, HasForms
 {
-    use Concerns\CanBeConfigured;
-    use Concerns\InteractsWithEvents;
-    use Concerns\InteractsWithHeaderActions;
-    use Concerns\InteractsWithModalActions;
-    use Concerns\InteractsWithRawJS;
-    use Concerns\InteractsWithRecords;
+    use CanBeConfigured;
+    use InteractsWithEvents;
+    use InteractsWithHeaderActions;
+    use InteractsWithModalActions;
+    use InteractsWithRawJS;
+    use InteractsWithRecords;
     use InteractsWithActions;
     use InteractsWithForms;
     use PageHasContextMenu;
 
-    protected static string $view = 'filament-fullcalendar::fullcalendar';
+    protected string $view = 'filament-fullcalendar::fullcalendar';
 
     protected int|string|array $columnSpan = 'full';
 
@@ -32,21 +42,21 @@ class FullCalendarWidget extends Widget implements HasActions, HasForms
     protected function headerActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 
     protected function modalActions(): array
     {
         return [
-            Actions\EditAction::make(),
-            Actions\DeleteAction::make(),
+            EditAction::make(),
+            DeleteAction::make(),
         ];
     }
 
     protected function viewAction(): Action
     {
-        return Actions\ViewAction::make();
+        return ViewAction::make();
     }
 
     /**
