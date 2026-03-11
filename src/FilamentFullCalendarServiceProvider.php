@@ -3,7 +3,6 @@
 namespace Saade\FilamentFullCalendar;
 
 use Filament\Support\Assets\AlpineComponent;
-use Filament\Support\Assets\Css;
 use Filament\Support\Facades\FilamentAsset;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -40,8 +39,7 @@ class FilamentFullCalendarServiceProvider extends PackageServiceProvider
     protected function getAssets(): array
     {
         return [
-            AlpineComponent::make('filament-fullcalendar-alpine', __DIR__ . '/../dist/filament-fullcalendar.js'),
-            Css::make('filament-fullcalendar-styles', __DIR__ . '/../dist/filament-fullcalendar.css'),
+            AlpineComponent::make('filament-fullcalendar-alpine', __DIR__.'/../resources/dist/filament-fullcalendar.js'),
         ];
     }
 }

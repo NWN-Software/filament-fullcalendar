@@ -33,6 +33,7 @@ export default function fullcalendar({
 }) {
     return {
         init() {
+            console.log('inist');
             const contextMenu = document.getElementById('contextMenu');
 
             /** @type Calendar */

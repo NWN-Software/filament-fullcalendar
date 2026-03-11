@@ -2,61 +2,55 @@
 
 namespace Saade\FilamentFullCalendar\Widgets;
 
-use Saade\FilamentFullCalendar\Widgets\Concerns\CanBeConfigured;
-use Saade\FilamentFullCalendar\Widgets\Concerns\InteractsWithEvents;
-use Saade\FilamentFullCalendar\Widgets\Concerns\InteractsWithHeaderActions;
-use Saade\FilamentFullCalendar\Widgets\Concerns\InteractsWithModalActions;
-use Saade\FilamentFullCalendar\Widgets\Concerns\InteractsWithRawJS;
-use Saade\FilamentFullCalendar\Widgets\Concerns\InteractsWithRecords;
-use Saade\FilamentFullCalendar\Actions\CreateAction;
-use Saade\FilamentFullCalendar\Actions\EditAction;
-use Saade\FilamentFullCalendar\Actions\DeleteAction;
-use Saade\FilamentFullCalendar\Actions\ViewAction;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Pages\Concerns\InteractsWithFormActions;
+use Filament\Pages\Concerns\InteractsWithHeaderActions;
 use Filament\Widgets\Widget;
 use Saade\FilamentFullCalendar\Actions;
 use Saade\FilamentFullCalendar\Traits\PageHasContextMenu;
 
 class FullCalendarWidget extends Widget implements HasActions, HasForms
 {
-    use CanBeConfigured;
-    use InteractsWithEvents;
-    use InteractsWithHeaderActions;
-    use InteractsWithModalActions;
-    use InteractsWithRawJS;
-    use InteractsWithRecords;
+    use Concerns\CanBeConfigured;
+    use Concerns\InteractsWithEvents;
+    use Concerns\InteractsWithRawJS;
+    use Concerns\InteractsWithRecords;
+    use Concerns\IsBackwardCompatible{
+        Concerns\IsBackwardCompatible::getHeaderActions insteadof InteractsWithHeaderActions;
+        Concerns\IsBackwardCompatible::getFormActions insteadof InteractsWithFormActions;
+    }
     use InteractsWithActions;
+    use InteractsWithFormActions;
     use InteractsWithForms;
+    use InteractsWithHeaderActions;
     use PageHasContextMenu;
 
     protected string $view = 'filament-fullcalendar::fullcalendar';
 
     protected int|string|array $columnSpan = 'full';
 
-    public bool $loading = false;
-
     protected function headerActions(): array
     {
         return [
-            CreateAction::make(),
+            Actions\CreateAction::make(),
         ];
     }
 
     protected function modalActions(): array
     {
         return [
-            EditAction::make(),
-            DeleteAction::make(),
+            Actions\EditAction::make(),
+            Actions\DeleteAction::make(),
         ];
     }
 
     protected function viewAction(): Action
     {
-        return ViewAction::make();
+        return Actions\ViewAction::make();
     }
 
     /**
@@ -70,22 +64,12 @@ class FullCalendarWidget extends Widget implements HasActions, HasForms
         return [];
     }
 
+    public function onViewChanged(array $view): void
+    {
+        //
+    }
+
     public function getFormSchema(): array
-    {
-        return [];
-    }
-
-    public function onEventResize(array $event, array $oldEvent, array $relatedEvents, array $startDelta, array $endDelta): bool
-    {
-        return false;
-    }
-
-    public function onViewChanged(array $view)
-    {
-        return $view['viewType'];
-    }
-
-    public function getRecurringEvents(): array
     {
         return [];
     }
